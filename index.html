@@ -24,35 +24,35 @@
                 <span class="text-xl font-black italic text-white">B</span>
             </div>
             <div>
-                <h1 class="text-lg font-black uppercase italic leading-none text-white">BJJ FLOW PRO</h1>
-                <p id="stats-topo" class="text-[9px] text-purple-400 font-bold uppercase tracking-widest italic">0 ATLETAS ATIVOS</p>
+                <h1 class="text-lg font-black uppercase italic leading-none">BJJ FLOW PRO</h1>
+                <p id="stats-topo" class="text-[9px] text-purple-400 font-bold uppercase tracking-widest italic">0 ATLETAS</p>
             </div>
         </div>
         <div class="flex gap-2">
-            <button onclick="openM('m-financeiro')" class="bg-emerald-900/20 text-emerald-400 p-3 rounded-xl border border-emerald-800/30">💰</button>
-            <button onclick="openM('m-mural')" class="bg-blue-900/20 text-blue-400 p-3 rounded-xl border border-blue-800/30">📢</button>
+            <button onclick="openM('m-financeiro')" class="bg-zinc-900 p-3 rounded-xl border border-zinc-800">💰</button>
+            <button onclick="openM('m-mural')" class="bg-zinc-900 p-3 rounded-xl border border-zinc-800">📢</button>
             <button onclick="openM('m-gestao-geral')" class="bg-zinc-900 p-3 rounded-xl border border-zinc-800">⚙️</button>
         </div>
     </header>
 
-    <div id="display-mural" class="max-w-6xl mx-auto mb-6 bg-blue-900/10 border border-blue-500/20 p-4 rounded-2xl hidden italic text-xs text-blue-300"></div>
+    <div id="display-mural" class="max-w-6xl mx-auto mb-6 bg-blue-900/20 border border-blue-500/30 p-4 rounded-2xl hidden italic text-xs text-blue-300"></div>
 
     <main class="max-w-6xl mx-auto">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xs font-black uppercase italic text-zinc-500">Gestão de Alunos</h2>
-            <button onclick="resetFormAluno(); openM('m-aluno')" class="bg-purple-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase">+ Novo Aluno</button>
+            <h2 class="text-[10px] font-black uppercase italic text-zinc-500 tracking-widest">Painel de Controle</h2>
+            <button onclick="resetFormAluno(); openM('m-aluno')" class="bg-purple-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase">+ Aluno</button>
         </div>
         
-        <div class="glass rounded-3xl p-4 overflow-x-auto shadow-2xl">
+        <div class="glass rounded-3xl p-4 overflow-x-auto">
             <table class="w-full text-left min-w-[1000px]">
                 <thead>
                     <tr class="text-zinc-600 text-[10px] font-black uppercase border-b border-zinc-800 pb-2">
-                        <th class="pb-2">ID / Atleta</th>
+                        <th class="pb-2">Atleta / ID</th>
                         <th class="pb-2">Idade (Nasc. Manual)</th>
-                        <th class="pb-2">Faixa / Unidade</th>
-                        <th class="pb-2">Progresso Aulas</th>
+                        <th class="pb-2">Graduação / Unidade</th>
+                        <th class="pb-2">Frequência</th>
                         <th class="pb-2">Financeiro</th>
-                        <th class="pb-2 text-right">Ações</th>
+                        <th class="pb-2 text-right">Gerenciar</th>
                     </tr>
                 </thead>
                 <tbody id="lista-alunos" class="divide-y divide-zinc-900"></tbody>
@@ -62,7 +62,7 @@
 
     <div id="m-aluno" class="modal">
         <div class="glass p-8 rounded-[2.5rem] w-full max-w-lg">
-            <h2 class="text-xl font-black uppercase italic text-purple-500 mb-6">Ficha do Atleta</h2>
+            <h2 id="titulo-aluno" class="text-xl font-black uppercase italic text-purple-500 mb-6">Ficha do Atleta</h2>
             <form onsubmit="saveAluno(event)" class="space-y-4">
                 <input type="hidden" id="a-id">
                 <input type="text" id="a-nome" class="input-pro" placeholder="Nome Completo" required>
@@ -81,47 +81,46 @@
                 </div>
 
                 <select id="a-faixa" class="input-pro" required>
-                    <option value="" disabled selected>Selecione a Faixa (17 opções)</option>
+                    <option value="" disabled selected>Selecione a Graduação (17 Faixas)</option>
                     <optgroup label="Infantil / Juvenil">
-                        <option value="Branca">Branca</option>
-                        <option value="Cinza/Branca">Cinza/Branca</option>
-                        <option value="Cinza">Cinza</option>
-                        <option value="Cinza/Preta">Cinza/Preta</option>
-                        <option value="Amarela/Branca">Amarela/Branca</option>
-                        <option value="Amarela">Amarela</option>
-                        <option value="Amarela/Preta">Amarela/Preta</option>
-                        <option value="Laranja/Branca">Laranja/Branca</option>
-                        <option value="Laranja">Laranja</option>
-                        <option value="Laranja/Preta">Laranja/Preta</option>
-                        <option value="Verde/Branca">Verde/Branca</option>
-                        <option value="Verde">Verde</option>
-                        <option value="Verde/Preta">Verde/Preta</option>
+                        <option value="Branca">01. Branca</option>
+                        <option value="Cinza/Branca">02. Cinza/Branca</option>
+                        <option value="Cinza">03. Cinza</option>
+                        <option value="Cinza/Preta">04. Cinza/Preta</option>
+                        <option value="Amarela/Branca">05. Amarela/Branca</option>
+                        <option value="Amarela">06. Amarela</option>
+                        <option value="Amarela/Preta">07. Amarela/Preta</option>
+                        <option value="Laranja/Branca">08. Laranja/Branca</option>
+                        <option value="Laranja">09. Laranja</option>
+                        <option value="Laranja/Preta">10. Laranja/Preta</option>
+                        <option value="Verde/Branca">11. Verde/Branca</option>
+                        <option value="Verde">12. Verde</option>
+                        <option value="Verde/Preta">13. Verde/Preta</option>
                     </optgroup>
                     <optgroup label="Adulto">
-                        <option value="Azul">Azul</option>
-                        <option value="Roxa">Roxa</option>
-                        <option value="Marrom">Marrom</option>
-                        <option value="Preta">Preta</option>
+                        <option value="Azul">14. Azul</option>
+                        <option value="Roxa">15. Roxa</option>
+                        <option value="Marrom">16. Marrom</option>
+                        <option value="Preta">17. Preta</option>
                     </optgroup>
                 </select>
 
-                <button type="submit" class="w-full bg-purple-600 py-4 rounded-xl font-black uppercase">Salvar Atleta</button>
-                <button type="button" onclick="closeM()" class="w-full text-zinc-600 font-black uppercase text-[10px]">Cancelar</button>
+                <button type="submit" class="w-full bg-purple-600 py-4 rounded-xl font-black uppercase">Salvar Registro</button>
+                <button type="button" onclick="closeM()" class="w-full text-zinc-600 font-black uppercase text-[10px]">Fechar</button>
             </form>
         </div>
     </div>
 
     <div id="m-gestao-geral" class="modal">
         <div class="glass p-8 rounded-[2.5rem] w-full max-w-2xl">
-            <h2 class="text-xl font-black uppercase italic text-purple-500 mb-6">Configurações</h2>
+            <h2 class="text-xl font-black uppercase italic text-purple-500 mb-6">Configurações do SaaS</h2>
             
             <div class="bg-zinc-900/50 p-5 rounded-2xl mb-6 border border-zinc-800">
                 <h3 class="text-xs font-black uppercase mb-4 text-emerald-400 italic">Cadastrar Academia/Escola</h3>
                 <div class="space-y-3">
                     <input type="text" id="esc-nome" class="input-pro" placeholder="Nome da Unidade">
                     <div class="grid grid-cols-2 gap-2">
-                        <input type="time" id="esc-inicio" class="input-pro">
-                        <input type="time" id="esc-fim" class="input-pro">
+                        <input type="time" id="esc-inicio" class="input-pro"><input type="time" id="esc-fim" class="input-pro">
                     </div>
                     <div class="flex gap-1" id="dia-selector">
                         <div class="day-chip" data-day="SEG">S</div><div class="day-chip" data-day="TER">T</div>
@@ -129,39 +128,36 @@
                         <div class="day-chip" data-day="SEX">S</div><div class="day-chip" data-day="SAB">S</div>
                         <div class="day-chip" data-day="DOM">D</div>
                     </div>
-                    <button onclick="addEscola()" class="w-full bg-emerald-600 py-3 rounded-lg font-black uppercase text-xs">Adicionar Unidade</button>
+                    <button onclick="addEscola()" class="w-full bg-emerald-600 py-3 rounded-lg font-black uppercase text-xs">Salvar Unidade</button>
                 </div>
                 <div id="lista-escolas" class="mt-4 space-y-2"></div>
             </div>
 
             <div class="bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800">
-                <h3 class="text-xs font-black uppercase mb-4 text-blue-400 italic">Itens da Loja</h3>
+                <h3 class="text-xs font-black uppercase mb-4 text-blue-400 italic">Estoque da Loja</h3>
                 <div class="flex gap-2 mb-4">
-                    <input type="text" id="prod-nome" class="input-pro" placeholder="Produto">
-                    <input type="number" id="prod-preco" class="input-pro w-24" placeholder="R$">
+                    <input type="text" id="prod-nome" class="input-pro" placeholder="Item"><input type="number" id="prod-preco" class="input-pro w-24" placeholder="R$">
                     <button onclick="addProduto()" class="bg-blue-600 px-4 rounded-xl font-black">+</button>
                 </div>
                 <div id="lista-produtos" class="space-y-2 text-xs"></div>
             </div>
             
-            <button onclick="closeM()" class="w-full mt-6 text-zinc-500 font-black uppercase text-[10px]">Fechar</button>
+            <button onclick="closeM()" class="w-full mt-6 text-zinc-500 font-black uppercase text-[10px]">Sair</button>
         </div>
     </div>
 
-    <div id="m-mural" class="modal"><div class="glass p-8 rounded-[2.5rem] w-full max-w-sm"><h2 class="text-xl font-black uppercase text-blue-500 mb-4">Aviso</h2><textarea id="in-mural" class="input-pro h-32 mb-4"></textarea><button onclick="saveMural()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Publicar</button><button onclick="closeM()" class="w-full mt-2 text-xs">Sair</button></div></div>
-    
-    <div id="m-financeiro" class="modal"><div class="glass p-8 rounded-[2.5rem] w-full max-w-sm text-center"><h2 class="text-xl font-black text-emerald-500 mb-4 italic">FINANCEIRO GERAL</h2><p id="saldo-total" class="text-4xl font-black text-white">R$ 0,00</p><button onclick="closeM()" class="mt-8 text-xs font-black uppercase">Voltar</button></div></div>
-
-    <div id="m-venda" class="modal"><div class="glass p-8 rounded-[2.5rem] w-full max-w-sm"><h2 class="text-xl font-black text-blue-400 mb-4">LOJA</h2><p id="venda-nome" class="text-xs mb-4"></p><input type="hidden" id="venda-id"><select id="venda-item" class="input-pro mb-4"></select><button onclick="execVenda()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Vender</button><button onclick="closeM()" class="w-full mt-2 text-xs">Sair</button></div></div>
+    <div id="m-mural" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm"><h2 class="text-xl font-black text-blue-500 mb-4">Mural</h2><textarea id="in-mural" class="input-pro h-32 mb-4"></textarea><button onclick="saveMural()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Publicar</button><button onclick="closeM()" class="w-full mt-2 text-xs">Sair</button></div></div>
+    <div id="m-financeiro" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm text-center"><h2 class="text-xl font-black text-emerald-500 mb-4 italic">CAIXA TOTAL</h2><p id="saldo-total" class="text-4xl font-black text-white">R$ 0,00</p><button onclick="closeM()" class="mt-8 text-xs font-black uppercase">Voltar</button></div></div>
+    <div id="m-venda" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm"><h2 class="text-xl font-black text-blue-400 mb-4">VENDA</h2><p id="venda-nome" class="text-xs mb-4 uppercase"></p><input type="hidden" id="venda-id"><select id="venda-item" class="input-pro mb-4"></select><button onclick="execVenda()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Confirmar Venda</button><button onclick="closeM()" class="w-full mt-2 text-xs">Cancelar</button></div></div>
 
     <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xs px-4">
-        <button onclick="openM('m-checkin')" class="w-full bg-emerald-600 py-6 rounded-full font-black text-xl italic shadow-2xl">CHECK-IN</button>
+        <button onclick="openM('m-checkin')" class="w-full bg-emerald-600 py-6 rounded-full font-black text-xl italic shadow-2xl">CHECK-IN RÁPIDO</button>
     </div>
 
-    <div id="m-checkin" class="modal"><div class="glass p-10 rounded-[3rem] w-full max-w-xs text-center"><h2 class="text-2xl font-black mb-6 italic">ID ATLETA</h2><input type="number" id="c-id" class="input-pro text-center text-5xl h-24 mb-6"><button onclick="checkin()" class="w-full bg-emerald-600 py-5 rounded-2xl font-black uppercase italic">Confirmar</button><button onclick="closeM()" class="mt-4 text-xs">Sair</button></div></div>
+    <div id="m-checkin" class="modal"><div class="glass p-10 rounded-[3rem] w-full max-w-xs text-center"><h2 class="text-2xl font-black mb-6 italic">ID DO ATLETA</h2><input type="number" id="c-id" class="input-pro text-center text-5xl h-24 mb-6"><button onclick="checkin()" class="w-full bg-emerald-600 py-5 rounded-2xl font-black uppercase">Confirmar</button><button onclick="closeM()" class="mt-4 text-xs">Sair</button></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('BJJ_FLOW_V6')) || { atletas: [], escolas: [], produtos: [], mural: "" };
+        let db = JSON.parse(localStorage.getItem('BJJ_FLOW_V7')) || { atletas: [], escolas: [], produtos: [], mural: "" };
 
         document.querySelectorAll('.day-chip').forEach(c => c.onclick = () => c.classList.toggle('selected'));
 
@@ -169,7 +165,7 @@
             document.getElementById(id).classList.add('active');
             if(id === 'm-aluno') {
                 const sel = document.getElementById('a-escola');
-                sel.innerHTML = db.escolas.map(e => `<option value="${e.nome}" ${autoEscola === e.nome ? 'selected' : ''}>${e.nome}</option>`).join('') || '<option value="Padrão">Padrão</option>';
+                sel.innerHTML = db.escolas.map(e => `<option value="${e.n}" ${autoEscola === e.n ? 'selected' : ''}>${e.n}</option>`).join('') || '<option value="Padrão">Padrão</option>';
             }
             if(id === 'm-gestao-geral') { renderEscolas(); renderProdutos(); }
             if(id === 'm-financeiro') calcFin();
@@ -188,7 +184,7 @@
         }
 
         function addEscola() {
-            const n = document.getElementById('esc-nome').value;
+            const n = document.getElementById('esc-nome').value.toUpperCase();
             const i = document.getElementById('esc-inicio').value;
             const f = document.getElementById('esc-fim').value;
             const d = Array.from(document.querySelectorAll('.day-chip.selected')).map(x => x.dataset.day);
@@ -196,19 +192,19 @@
         }
         function renderEscolas() {
             document.getElementById('lista-escolas').innerHTML = db.escolas.map(e => `
-                <div class="bg-zinc-800 p-3 rounded-lg flex justify-between items-center text-[10px]">
+                <div class="bg-zinc-800 p-3 rounded-xl flex justify-between items-center text-[10px] border border-zinc-700">
                     <span><b>${e.n}</b> (${e.i}-${e.f})</span>
-                    <button onclick="closeM(); openM('m-aluno', '${e.n}')" class="text-purple-400 font-bold">+ ALUNO</button>
+                    <button onclick="closeM(); openM('m-aluno', '${e.n}')" class="text-purple-400 font-black">+ ALUNO</button>
                 </div>`).join('');
         }
 
         function addProduto() {
-            const n = document.getElementById('prod-nome').value;
+            const n = document.getElementById('prod-nome').value.toUpperCase();
             const p = parseFloat(document.getElementById('prod-preco').value);
             if(n && p) { db.produtos.push({n, p, id: Date.now()}); save(); renderProdutos(); }
         }
         function renderProdutos() {
-            document.getElementById('lista-produtos').innerHTML = db.produtos.map(p => `<div class="bg-zinc-800 p-2 rounded flex justify-between"><span>${p.n}</span><span>R$ ${p.p}</span></div>`).join('');
+            document.getElementById('lista-produtos').innerHTML = db.produtos.map(p => `<div class="bg-zinc-800 p-2 rounded flex justify-between border border-zinc-700"><span>${p.n}</span><span class="text-blue-400">R$ ${p.p}</span></div>`).join('');
         }
 
         function saveAluno(e) {
@@ -237,22 +233,23 @@
             document.getElementById('a-meta').value = a.meta;
             document.getElementById('a-mensalidade').value = a.mensalidade;
             document.getElementById('a-faixa').value = a.faixa;
+            document.getElementById('titulo-aluno').innerText = "Editando Atleta";
             openM('m-aluno', a.escola); updateIdadePreview();
         }
 
-        function delAluno(id) { if(confirm("Excluir?")) { db.atletas = db.atletas.filter(x => x.id != id); save(); } }
+        function delAluno(id) { if(confirm("Deseja excluir permanentemente?")) { db.atletas = db.atletas.filter(x => x.id != id); save(); } }
 
         function checkin() {
             const id = document.getElementById('c-id').value;
-            const a = db.atletas.find(x => x.id == id || x.id.toString().slice(-4) == id);
-            if(a) { a.frequencia++; alert("OSS " + a.nome); save(); closeM(); } else alert("Nao achei");
+            const a = db.atletas.find(x => x.id.toString().slice(-4) == id || x.id == id);
+            if(a) { a.frequencia++; alert("OSS! " + a.nome); save(); closeM(); } else alert("ID não encontrado!");
         }
 
         function openVenda(id) {
             const a = db.atletas.find(x => x.id == id);
             document.getElementById('venda-nome').innerText = a.nome;
             document.getElementById('venda-id').value = id;
-            document.getElementById('venda-item').innerHTML = db.produtos.map(p => `<option value="${p.p}">${p.n} - R$ ${p.p}</option>`).join('');
+            document.getElementById('venda-item').innerHTML = db.produtos.map(p => `<option value="${p.p}">${p.n} - R$ ${p.p}</option>`).join('') || '<option>Nenhum produto</option>';
             openM('m-venda');
         }
         function execVenda() {
@@ -269,8 +266,14 @@
             document.getElementById('saldo-total').innerText = "R$ " + t.toFixed(2);
         }
 
-        function save() { localStorage.setItem('BJJ_FLOW_V6', JSON.stringify(db)); render(); }
-        function resetFormAluno() { document.getElementById('a-id').value = ""; document.getElementById('a-nome').value = ""; document.getElementById('preview-idade').innerText = ""; }
+        function save() { localStorage.setItem('BJJ_FLOW_V7', JSON.stringify(db)); render(); }
+        function resetFormAluno() { 
+            document.getElementById('a-id').value = ""; 
+            document.getElementById('a-nome').value = ""; 
+            document.getElementById('a-nasc').value = "";
+            document.getElementById('preview-idade').innerText = "";
+            document.getElementById('titulo-aluno').innerText = "Ficha do Atleta";
+        }
 
         function render() {
             document.getElementById('stats-topo').innerText = db.atletas.length + " ATLETAS ATIVOS";
@@ -281,14 +284,14 @@
                 const p = a.meta > 0 ? Math.min((a.frequencia / a.meta) * 100, 100) : 0;
                 const c = a.compras.reduce((acc, v) => acc + v, 0);
                 return `<tr class="text-[11px] border-b border-zinc-900">
-                    <td class="py-4 font-black">#${a.id.toString().slice(-3)}<br>${a.nome}</td>
-                    <td class="italic font-bold text-zinc-400">${calcIdade(a.nasc)} ANOS<br><span class="text-[9px]">${a.nasc}</span></td>
-                    <td class="uppercase italic">${a.faixa}<br><span class="text-purple-400 text-[9px]">${a.escola}</span></td>
-                    <td><div class="w-20 bg-zinc-800 h-1 rounded-full"><div class="bg-purple-600 h-full" style="width:${p}%"></div></div><span class="text-[8px]">${a.frequencia}/${a.meta}</span></td>
-                    <td><button onclick="openVenda(${a.id})" class="text-emerald-400 font-bold italic underline">R$ ${(a.mensalidade + c).toFixed(2)}</button></td>
+                    <td class="py-5 font-black">#${a.id.toString().slice(-4)}<br><span class="text-white text-xs">${a.nome}</span></td>
+                    <td class="italic font-bold text-zinc-400 uppercase">${calcIdade(a.nasc)} ANOS<br><span class="text-[8px] text-zinc-600">NASC: ${a.nasc}</span></td>
+                    <td class="uppercase italic text-zinc-300 font-bold">${a.faixa}<br><span class="text-purple-400 text-[9px] font-black">${a.escola}</span></td>
+                    <td><div class="w-20 bg-zinc-800 h-1 rounded-full mb-1"><div class="bg-purple-600 h-full shadow-[0_0_8px_#a855f7]" style="width:${p}%"></div></div><span class="text-[9px] text-zinc-500 font-black">${a.frequencia}/${a.meta} AULAS</span></td>
+                    <td><button onclick="openVenda(${a.id})" class="text-emerald-400 font-black italic underline">R$ ${(a.mensalidade + c).toFixed(2)}</button></td>
                     <td class="text-right">
-                        <button onclick="editAluno(${a.id})" class="text-blue-400 font-black mr-2">EDITAR</button>
-                        <button onclick="delAluno(${a.id})" class="text-red-500 font-black">X</button>
+                        <button onclick="editAluno(${a.id})" class="text-blue-400 font-black uppercase text-[10px] mr-3">Editar</button>
+                        <button onclick="delAluno(${a.id})" class="text-red-900 font-black uppercase text-[10px]">X</button>
                     </td>
                 </tr>`;
             }).join('');
@@ -299,13 +302,5 @@
             window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
         }
     </script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('BJJ Flow carregado offline!', reg))
-        .catch(err => console.log('Erro no Service Worker', err));
-    });
-  }
-</script></body>
+</body>
 </html>
