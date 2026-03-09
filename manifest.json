@@ -1,10 +1,10 @@
 {
-  "name": "BJJ FLOW PRO",
-  "short_name": "BJJ FLOW",
-  "description": "Sistema de Gestão de Jiu-Jitsu e Lojinha",
-  "start_url": "./index.html",
+  "name": "BJJ Flow Pro",
+  "short_name": "BJJ Flow",
+  "description": "Gestão Completa de Jiu-Jitsu",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#09090b",
+  "background_color": "#0b0b0d",
   "theme_color": "#a855f7",
   "icons": [
     {
