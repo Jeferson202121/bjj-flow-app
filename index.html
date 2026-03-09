@@ -3,43 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.json">
     <title>BJJ FLOW PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0b0b0d; color: #fafafa; }
+        body { font-family: 'Inter', sans-serif; background: #0b0b0d; color: #fafafa; -webkit-tap-highlight-color: transparent; }
         .glass { background: rgba(18, 18, 21, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
-        .input-pro { background: #1a1a1e; border: 1px solid #333; border-radius: 10px; padding: 10px; color: white; width: 100%; outline: none; font-size: 13px; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
+        .input-pro { background: #1a1a1e; border: 1px solid #333; border-radius: 10px; padding: 12px; color: white; width: 100%; outline: none; font-size: 14px; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; padding: 15px; overflow-y: auto; }
         .modal.active { display: flex; }
-        .btn-edit { color: #60a5fa; font-weight: 800; font-size: 10px; border: 1px solid #1e3a8a; padding: 4px 8px; rounded: 5px; }
-        .btn-del { color: #f87171; font-weight: 800; font-size: 10px; border: 1px solid #7f1d1d; padding: 4px 8px; rounded: 5px; }
+        .day-chip { padding: 8px; border-radius: 8px; font-size: 10px; font-weight: 800; border: 1px solid #333; cursor: pointer; text-align: center; flex: 1; }
+        .day-chip.selected { background: #a855f7; border-color: #c084fc; color: white; }
     </style>
 </head>
 <body class="p-4 pb-32">
 
     <header class="max-w-6xl mx-auto flex justify-between items-center mb-6">
-        <h1 class="text-xl font-black italic text-purple-500">BJJ FLOW PRO</h1>
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-900/40">
+                <span class="text-xl font-black italic text-white">B</span>
+            </div>
+            <div>
+                <h1 class="text-lg font-black uppercase italic leading-none text-white">BJJ FLOW PRO</h1>
+                <p id="stats-topo" class="text-[9px] text-purple-400 font-bold uppercase tracking-widest italic">0 ATLETAS ATIVOS</p>
+            </div>
+        </div>
         <div class="flex gap-2">
-            <button onclick="openM('m-financeiro')" class="bg-zinc-900 p-3 rounded-xl border border-zinc-800">💰</button>
-            <button onclick="openM('m-mural')" class="bg-zinc-900 p-3 rounded-xl border border-zinc-800">📢</button>
+            <button onclick="openM('m-financeiro')" class="bg-emerald-900/20 text-emerald-400 p-3 rounded-xl border border-emerald-800/30">💰</button>
+            <button onclick="openM('m-mural')" class="bg-blue-900/20 text-blue-400 p-3 rounded-xl border border-blue-800/30">📢</button>
             <button onclick="openM('m-gestao-geral')" class="bg-zinc-900 p-3 rounded-xl border border-zinc-800">⚙️</button>
         </div>
     </header>
 
+    <div id="display-mural" class="max-w-6xl mx-auto mb-6 bg-blue-900/10 border border-blue-500/20 p-4 rounded-2xl hidden italic text-xs text-blue-300"></div>
+
     <main class="max-w-6xl mx-auto">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xs font-black uppercase italic">Lista de Atletas</h2>
-            <button onclick="novoAluno()" class="bg-purple-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase">+ Novo Aluno</button>
+            <h2 class="text-xs font-black uppercase italic text-zinc-500">Gestão de Alunos</h2>
+            <button onclick="resetFormAluno(); openM('m-aluno')" class="bg-purple-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase">+ Novo Aluno</button>
         </div>
         
-        <div class="glass rounded-3xl p-4 overflow-x-auto">
+        <div class="glass rounded-3xl p-4 overflow-x-auto shadow-2xl">
             <table class="w-full text-left min-w-[1000px]">
                 <thead>
                     <tr class="text-zinc-600 text-[10px] font-black uppercase border-b border-zinc-800 pb-2">
-                        <th class="pb-2">Nome / ID</th>
-                        <th class="pb-2">Idade (Nasc.)</th>
+                        <th class="pb-2">ID / Atleta</th>
+                        <th class="pb-2">Idade (Nasc. Manual)</th>
                         <th class="pb-2">Faixa / Unidade</th>
-                        <th class="pb-2">Frequência</th>
+                        <th class="pb-2">Progresso Aulas</th>
                         <th class="pb-2">Financeiro</th>
                         <th class="pb-2 text-right">Ações</th>
                     </tr>
@@ -50,8 +61,8 @@
     </main>
 
     <div id="m-aluno" class="modal">
-        <div class="glass p-8 rounded-[2.5rem] w-full max-w-lg border border-purple-500/30">
-            <h2 id="modal-titulo" class="text-xl font-black uppercase italic text-purple-500 mb-6 text-center">Ficha Cadastral</h2>
+        <div class="glass p-8 rounded-[2.5rem] w-full max-w-lg">
+            <h2 class="text-xl font-black uppercase italic text-purple-500 mb-6">Ficha do Atleta</h2>
             <form onsubmit="saveAluno(event)" class="space-y-4">
                 <input type="hidden" id="a-id">
                 <input type="text" id="a-nome" class="input-pro" placeholder="Nome Completo" required>
@@ -59,8 +70,7 @@
                 <div class="grid grid-cols-2 gap-3">
                     <select id="a-escola" class="input-pro" required></select>
                     <div>
-                        <label class="text-[9px] font-bold text-zinc-500">NASCIMENTO MANUAL</label>
-                        <input type="date" id="a-nasc" class="input-pro" oninput="calcularIdadePreview()" required>
+                        <input type="date" id="a-nasc" class="input-pro" oninput="updateIdadePreview()" required>
                         <p id="preview-idade" class="text-[10px] text-purple-400 font-black mt-1 uppercase"></p>
                     </div>
                 </div>
@@ -70,21 +80,22 @@
                     <input type="number" id="a-mensalidade" class="input-pro" placeholder="Mensalidade R$">
                 </div>
 
-                <select id="a-faixa" class="input-pro">
-                    <optgroup label="Infantil">
+                <select id="a-faixa" class="input-pro" required>
+                    <option value="" disabled selected>Selecione a Faixa (17 opções)</option>
+                    <optgroup label="Infantil / Juvenil">
                         <option value="Branca">Branca</option>
-                        <option value="Cinza/Branca">Cinza e Branca</option>
+                        <option value="Cinza/Branca">Cinza/Branca</option>
                         <option value="Cinza">Cinza</option>
-                        <option value="Cinza/Preta">Cinza e Preta</option>
-                        <option value="Amarela/Branca">Amarela e Branca</option>
+                        <option value="Cinza/Preta">Cinza/Preta</option>
+                        <option value="Amarela/Branca">Amarela/Branca</option>
                         <option value="Amarela">Amarela</option>
-                        <option value="Amarela/Preta">Amarela e Preta</option>
-                        <option value="Laranja/Branca">Laranja e Branca</option>
+                        <option value="Amarela/Preta">Amarela/Preta</option>
+                        <option value="Laranja/Branca">Laranja/Branca</option>
                         <option value="Laranja">Laranja</option>
-                        <option value="Laranja/Preta">Laranja e Preta</option>
-                        <option value="Verde/Branca">Verde e Branca</option>
+                        <option value="Laranja/Preta">Laranja/Preta</option>
+                        <option value="Verde/Branca">Verde/Branca</option>
                         <option value="Verde">Verde</option>
-                        <option value="Verde/Preta">Verde e Preta</option>
+                        <option value="Verde/Preta">Verde/Preta</option>
                     </optgroup>
                     <optgroup label="Adulto">
                         <option value="Azul">Azul</option>
@@ -94,60 +105,127 @@
                     </optgroup>
                 </select>
 
-                <button type="submit" class="w-full bg-purple-600 py-4 rounded-xl font-black uppercase shadow-lg">Confirmar Registro</button>
-                <button type="button" onclick="closeM()" class="w-full text-zinc-600 font-black uppercase text-[10px] mt-2">Cancelar</button>
+                <button type="submit" class="w-full bg-purple-600 py-4 rounded-xl font-black uppercase">Salvar Atleta</button>
+                <button type="button" onclick="closeM()" class="w-full text-zinc-600 font-black uppercase text-[10px]">Cancelar</button>
             </form>
         </div>
     </div>
 
-    <script>
-        let db = JSON.parse(localStorage.getItem('BJJ_FLOW_FINAL')) || { escolas: [], atletas: [], produtos: [], mural: "" };
+    <div id="m-gestao-geral" class="modal">
+        <div class="glass p-8 rounded-[2.5rem] w-full max-w-2xl">
+            <h2 class="text-xl font-black uppercase italic text-purple-500 mb-6">Configurações</h2>
+            
+            <div class="bg-zinc-900/50 p-5 rounded-2xl mb-6 border border-zinc-800">
+                <h3 class="text-xs font-black uppercase mb-4 text-emerald-400 italic">Cadastrar Academia/Escola</h3>
+                <div class="space-y-3">
+                    <input type="text" id="esc-nome" class="input-pro" placeholder="Nome da Unidade">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="time" id="esc-inicio" class="input-pro">
+                        <input type="time" id="esc-fim" class="input-pro">
+                    </div>
+                    <div class="flex gap-1" id="dia-selector">
+                        <div class="day-chip" data-day="SEG">S</div><div class="day-chip" data-day="TER">T</div>
+                        <div class="day-chip" data-day="QUA">Q</div><div class="day-chip" data-day="QUI">Q</div>
+                        <div class="day-chip" data-day="SEX">S</div><div class="day-chip" data-day="SAB">S</div>
+                        <div class="day-chip" data-day="DOM">D</div>
+                    </div>
+                    <button onclick="addEscola()" class="w-full bg-emerald-600 py-3 rounded-lg font-black uppercase text-xs">Adicionar Unidade</button>
+                </div>
+                <div id="lista-escolas" class="mt-4 space-y-2"></div>
+            </div>
 
-        function openM(id) { document.getElementById(id).classList.add('active'); }
+            <div class="bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800">
+                <h3 class="text-xs font-black uppercase mb-4 text-blue-400 italic">Itens da Loja</h3>
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="prod-nome" class="input-pro" placeholder="Produto">
+                    <input type="number" id="prod-preco" class="input-pro w-24" placeholder="R$">
+                    <button onclick="addProduto()" class="bg-blue-600 px-4 rounded-xl font-black">+</button>
+                </div>
+                <div id="lista-produtos" class="space-y-2 text-xs"></div>
+            </div>
+            
+            <button onclick="closeM()" class="w-full mt-6 text-zinc-500 font-black uppercase text-[10px]">Fechar</button>
+        </div>
+    </div>
+
+    <div id="m-mural" class="modal"><div class="glass p-8 rounded-[2.5rem] w-full max-w-sm"><h2 class="text-xl font-black uppercase text-blue-500 mb-4">Aviso</h2><textarea id="in-mural" class="input-pro h-32 mb-4"></textarea><button onclick="saveMural()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Publicar</button><button onclick="closeM()" class="w-full mt-2 text-xs">Sair</button></div></div>
+    
+    <div id="m-financeiro" class="modal"><div class="glass p-8 rounded-[2.5rem] w-full max-w-sm text-center"><h2 class="text-xl font-black text-emerald-500 mb-4 italic">FINANCEIRO GERAL</h2><p id="saldo-total" class="text-4xl font-black text-white">R$ 0,00</p><button onclick="closeM()" class="mt-8 text-xs font-black uppercase">Voltar</button></div></div>
+
+    <div id="m-venda" class="modal"><div class="glass p-8 rounded-[2.5rem] w-full max-w-sm"><h2 class="text-xl font-black text-blue-400 mb-4">LOJA</h2><p id="venda-nome" class="text-xs mb-4"></p><input type="hidden" id="venda-id"><select id="venda-item" class="input-pro mb-4"></select><button onclick="execVenda()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Vender</button><button onclick="closeM()" class="w-full mt-2 text-xs">Sair</button></div></div>
+
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xs px-4">
+        <button onclick="openM('m-checkin')" class="w-full bg-emerald-600 py-6 rounded-full font-black text-xl italic shadow-2xl">CHECK-IN</button>
+    </div>
+
+    <div id="m-checkin" class="modal"><div class="glass p-10 rounded-[3rem] w-full max-w-xs text-center"><h2 class="text-2xl font-black mb-6 italic">ID ATLETA</h2><input type="number" id="c-id" class="input-pro text-center text-5xl h-24 mb-6"><button onclick="checkin()" class="w-full bg-emerald-600 py-5 rounded-2xl font-black uppercase italic">Confirmar</button><button onclick="closeM()" class="mt-4 text-xs">Sair</button></div></div>
+
+    <script>
+        let db = JSON.parse(localStorage.getItem('BJJ_FLOW_V6')) || { atletas: [], escolas: [], produtos: [], mural: "" };
+
+        document.querySelectorAll('.day-chip').forEach(c => c.onclick = () => c.classList.toggle('selected'));
+
+        function openM(id, autoEscola = null) {
+            document.getElementById(id).classList.add('active');
+            if(id === 'm-aluno') {
+                const sel = document.getElementById('a-escola');
+                sel.innerHTML = db.escolas.map(e => `<option value="${e.nome}" ${autoEscola === e.nome ? 'selected' : ''}>${e.nome}</option>`).join('') || '<option value="Padrão">Padrão</option>';
+            }
+            if(id === 'm-gestao-geral') { renderEscolas(); renderProdutos(); }
+            if(id === 'm-financeiro') calcFin();
+        }
         function closeM() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
 
-        function novoAluno() {
-            document.getElementById('a-id').value = "";
-            document.getElementById('modal-titulo').innerText = "Novo Cadastro";
-            const sel = document.getElementById('a-escola');
-            sel.innerHTML = db.escolas.length ? db.escolas.map(e => `<option value="${e.nome}">${e.nome}</option>`).join('') : '<option value="Padrão">Academia Padrão</option>';
-            openM('m-aluno');
+        function calcIdade(dn) {
+            const n = new Date(dn); const h = new Date();
+            let i = h.getFullYear() - n.getFullYear();
+            if (h.getMonth() < n.getMonth() || (h.getMonth() == n.getMonth() && h.getDate() < n.getDate())) i--;
+            return i || 0;
+        }
+        function updateIdadePreview() {
+            const v = document.getElementById('a-nasc').value;
+            if(v) document.getElementById('preview-idade').innerText = calcIdade(v) + " ANOS";
         }
 
-        function calcularIdade(dataNasc) {
-            const nasc = new Date(dataNasc);
-            const hoje = new Date();
-            let idade = hoje.getFullYear() - nasc.getFullYear();
-            if (hoje.getMonth() < nasc.getMonth() || (hoje.getMonth() == nasc.getMonth() && hoje.getDate() < nasc.getDate())) idade--;
-            return idade || 0;
+        function addEscola() {
+            const n = document.getElementById('esc-nome').value;
+            const i = document.getElementById('esc-inicio').value;
+            const f = document.getElementById('esc-fim').value;
+            const d = Array.from(document.querySelectorAll('.day-chip.selected')).map(x => x.dataset.day);
+            if(n && i && f) { db.escolas.push({n, i, f, d, id: Date.now()}); save(); renderEscolas(); }
+        }
+        function renderEscolas() {
+            document.getElementById('lista-escolas').innerHTML = db.escolas.map(e => `
+                <div class="bg-zinc-800 p-3 rounded-lg flex justify-between items-center text-[10px]">
+                    <span><b>${e.n}</b> (${e.i}-${e.f})</span>
+                    <button onclick="closeM(); openM('m-aluno', '${e.n}')" class="text-purple-400 font-bold">+ ALUNO</button>
+                </div>`).join('');
         }
 
-        function calcularIdadePreview() {
-            const data = document.getElementById('a-nasc').value;
-            if(data) document.getElementById('preview-idade').innerText = calcularIdade(data) + " ANOS CALCULADOS";
+        function addProduto() {
+            const n = document.getElementById('prod-nome').value;
+            const p = parseFloat(document.getElementById('prod-preco').value);
+            if(n && p) { db.produtos.push({n, p, id: Date.now()}); save(); renderProdutos(); }
+        }
+        function renderProdutos() {
+            document.getElementById('lista-produtos').innerHTML = db.produtos.map(p => `<div class="bg-zinc-800 p-2 rounded flex justify-between"><span>${p.n}</span><span>R$ ${p.p}</span></div>`).join('');
         }
 
         function saveAluno(e) {
             e.preventDefault();
             const id = document.getElementById('a-id').value;
-            const novoAtleta = {
+            const obj = {
                 id: id ? parseInt(id) : Date.now(),
                 nome: document.getElementById('a-nome').value.toUpperCase(),
                 escola: document.getElementById('a-escola').value,
                 nasc: document.getElementById('a-nasc').value,
                 meta: parseInt(document.getElementById('a-meta').value) || 0,
-                frequencia: id ? db.atletas.find(x => x.id == id).frequencia : 0,
                 mensalidade: parseFloat(document.getElementById('a-mensalidade').value) || 0,
                 faixa: document.getElementById('a-faixa').value,
-                vendas: id ? db.atletas.find(x => x.id == id).vendas : []
+                frequencia: id ? db.atletas.find(x => x.id == id).frequencia : 0,
+                compras: id ? db.atletas.find(x => x.id == id).compras : []
             };
-
-            if(id) {
-                const idx = db.atletas.findIndex(x => x.id == id);
-                db.atletas[idx] = novoAtleta;
-            } else {
-                db.atletas.push(novoAtleta);
-            }
+            if(id) db.atletas[db.atletas.findIndex(x => x.id == id)] = obj; else db.atletas.push(obj);
             save(); closeM();
         }
 
@@ -159,42 +237,67 @@
             document.getElementById('a-meta').value = a.meta;
             document.getElementById('a-mensalidade').value = a.mensalidade;
             document.getElementById('a-faixa').value = a.faixa;
-            document.getElementById('modal-titulo').innerText = "Editando Atleta";
-            calcularIdadePreview();
-            openM('m-aluno');
+            openM('m-aluno', a.escola); updateIdadePreview();
         }
 
-        function excluirAluno(id) {
-            if(confirm("Tem certeza que deseja excluir este aluno?")) {
-                db.atletas = db.atletas.filter(x => x.id !== id);
-                save();
-            }
+        function delAluno(id) { if(confirm("Excluir?")) { db.atletas = db.atletas.filter(x => x.id != id); save(); } }
+
+        function checkin() {
+            const id = document.getElementById('c-id').value;
+            const a = db.atletas.find(x => x.id == id || x.id.toString().slice(-4) == id);
+            if(a) { a.frequencia++; alert("OSS " + a.nome); save(); closeM(); } else alert("Nao achei");
         }
 
-        function save() { 
-            localStorage.setItem('BJJ_FLOW_FINAL', JSON.stringify(db)); 
-            render(); 
+        function openVenda(id) {
+            const a = db.atletas.find(x => x.id == id);
+            document.getElementById('venda-nome').innerText = a.nome;
+            document.getElementById('venda-id').value = id;
+            document.getElementById('venda-item').innerHTML = db.produtos.map(p => `<option value="${p.p}">${p.n} - R$ ${p.p}</option>`).join('');
+            openM('m-venda');
         }
+        function execVenda() {
+            const a = db.atletas.find(x => x.id == document.getElementById('venda-id').value);
+            a.compras.push(parseFloat(document.getElementById('venda-item').value));
+            save(); closeM();
+        }
+
+        function saveMural() { db.mural = document.getElementById('in-mural').value; save(); closeM(); }
+
+        function calcFin() {
+            let t = 0;
+            db.atletas.forEach(a => { t += a.mensalidade; a.compras.forEach(c => t += c); });
+            document.getElementById('saldo-total').innerText = "R$ " + t.toFixed(2);
+        }
+
+        function save() { localStorage.setItem('BJJ_FLOW_V6', JSON.stringify(db)); render(); }
+        function resetFormAluno() { document.getElementById('a-id').value = ""; document.getElementById('a-nome').value = ""; document.getElementById('preview-idade').innerText = ""; }
 
         function render() {
-            const tbody = document.getElementById('lista-alunos');
-            tbody.innerHTML = db.atletas.map(a => `
-                <tr class="text-[11px] border-b border-zinc-900">
-                    <td class="py-4 font-black text-white uppercase">${a.nome} <br> <span class="text-[8px] text-zinc-600">ID: ${a.id}</span></td>
-                    <td class="font-bold text-zinc-400 italic">${calcularIdade(a.nasc)} ANOS <br> <span class="text-[8px]">${a.nasc}</span></td>
-                    <td class="font-bold text-zinc-400 uppercase italic">${a.faixa}<br><span class="text-purple-500 text-[8px]">${a.escola}</span></td>
-                    <td><span class="text-zinc-500">${a.frequencia} / ${a.meta}</span></td>
-                    <td class="text-emerald-500 font-bold">R$ ${a.mensalidade.toFixed(2)}</td>
-                    <td class="text-right">
-                        <div class="flex gap-2 justify-end">
-                            <button onclick="editAluno(${a.id})" class="btn-edit">EDITAR</button>
-                            <button onclick="excluirAluno(${a.id})" class="btn-del">EXCLUIR</button>
-                        </div>
-                    </td>
-                </tr>`).join('');
-        }
+            document.getElementById('stats-topo').innerText = db.atletas.length + " ATLETAS ATIVOS";
+            const m = document.getElementById('display-mural');
+            if(db.mural) { m.innerText = "📢 " + db.mural; m.classList.remove('hidden'); } else m.classList.add('hidden');
 
+            document.getElementById('lista-alunos').innerHTML = db.atletas.map(a => {
+                const p = a.meta > 0 ? Math.min((a.frequencia / a.meta) * 100, 100) : 0;
+                const c = a.compras.reduce((acc, v) => acc + v, 0);
+                return `<tr class="text-[11px] border-b border-zinc-900">
+                    <td class="py-4 font-black">#${a.id.toString().slice(-3)}<br>${a.nome}</td>
+                    <td class="italic font-bold text-zinc-400">${calcIdade(a.nasc)} ANOS<br><span class="text-[9px]">${a.nasc}</span></td>
+                    <td class="uppercase italic">${a.faixa}<br><span class="text-purple-400 text-[9px]">${a.escola}</span></td>
+                    <td><div class="w-20 bg-zinc-800 h-1 rounded-full"><div class="bg-purple-600 h-full" style="width:${p}%"></div></div><span class="text-[8px]">${a.frequencia}/${a.meta}</span></td>
+                    <td><button onclick="openVenda(${a.id})" class="text-emerald-400 font-bold italic underline">R$ ${(a.mensalidade + c).toFixed(2)}</button></td>
+                    <td class="text-right">
+                        <button onclick="editAluno(${a.id})" class="text-blue-400 font-black mr-2">EDITAR</button>
+                        <button onclick="delAluno(${a.id})" class="text-red-500 font-black">X</button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
         render();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
+        }
     </script>
 <script>
   if ('serviceWorker' in navigator) {
