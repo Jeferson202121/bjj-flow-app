@@ -39,8 +39,8 @@
 
     <main class="max-w-6xl mx-auto">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-[10px] font-black uppercase italic text-zinc-500 tracking-widest">Painel de Controle</h2>
-            <button onclick="resetFormAluno(); openM('m-aluno')" class="bg-purple-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase">+ Aluno</button>
+            <h2 class="text-[10px] font-black uppercase italic text-zinc-500 tracking-widest">Painel Geral</h2>
+            <button onclick="resetFormAluno(); openM('m-aluno')" class="bg-purple-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase">+ Novo Aluno</button>
         </div>
         
         <div class="glass rounded-3xl p-4 overflow-x-auto">
@@ -48,11 +48,11 @@
                 <thead>
                     <tr class="text-zinc-600 text-[10px] font-black uppercase border-b border-zinc-800 pb-2">
                         <th class="pb-2">Atleta / ID</th>
-                        <th class="pb-2">Idade (Nasc. Manual)</th>
-                        <th class="pb-2">Graduação / Unidade</th>
+                        <th class="pb-2">Idade (Manual)</th>
+                        <th class="pb-2">Graduação / Escola</th>
                         <th class="pb-2">Frequência</th>
                         <th class="pb-2">Financeiro</th>
-                        <th class="pb-2 text-right">Gerenciar</th>
+                        <th class="pb-2 text-right">Ações</th>
                     </tr>
                 </thead>
                 <tbody id="lista-alunos" class="divide-y divide-zinc-900"></tbody>
@@ -71,7 +71,7 @@
                     <select id="a-escola" class="input-pro" required></select>
                     <div>
                         <input type="date" id="a-nasc" class="input-pro" oninput="updateIdadePreview()" required>
-                        <p id="preview-idade" class="text-[10px] text-purple-400 font-black mt-1 uppercase"></p>
+                        <p id="preview-idade" class="text-[10px] text-purple-400 font-black mt-1 uppercase">IDADE: --</p>
                     </div>
                 </div>
 
@@ -81,23 +81,23 @@
                 </div>
 
                 <select id="a-faixa" class="input-pro" required>
-                    <option value="" disabled selected>Selecione a Graduação (17 Faixas)</option>
-                    <optgroup label="Infantil / Juvenil">
+                    <option value="" disabled selected>Escolha a Faixa</option>
+                    <optgroup label="Infantil (Até 15 anos)">
                         <option value="Branca">01. Branca</option>
-                        <option value="Cinza/Branca">02. Cinza/Branca</option>
+                        <option value="Cinza/Branca">02. Cinza e Branca</option>
                         <option value="Cinza">03. Cinza</option>
-                        <option value="Cinza/Preta">04. Cinza/Preta</option>
-                        <option value="Amarela/Branca">05. Amarela/Branca</option>
+                        <option value="Cinza/Preta">04. Cinza e Preta</option>
+                        <option value="Amarela/Branca">05. Amarela e Branca</option>
                         <option value="Amarela">06. Amarela</option>
-                        <option value="Amarela/Preta">07. Amarela/Preta</option>
-                        <option value="Laranja/Branca">08. Laranja/Branca</option>
+                        <option value="Amarela/Preta">07. Amarela e Preta</option>
+                        <option value="Laranja/Branca">08. Laranja e Branca</option>
                         <option value="Laranja">09. Laranja</option>
-                        <option value="Laranja/Preta">10. Laranja/Preta</option>
-                        <option value="Verde/Branca">11. Verde/Branca</option>
+                        <option value="Laranja/Preta">10. Laranja e Preta</option>
+                        <option value="Verde/Branca">11. Verde e Branca</option>
                         <option value="Verde">12. Verde</option>
-                        <option value="Verde/Preta">13. Verde/Preta</option>
+                        <option value="Verde/Preta">13. Verde e Preta</option>
                     </optgroup>
-                    <optgroup label="Adulto">
+                    <optgroup label="Adulto (+16 anos)">
                         <option value="Azul">14. Azul</option>
                         <option value="Roxa">15. Roxa</option>
                         <option value="Marrom">16. Marrom</option>
@@ -105,59 +105,56 @@
                     </optgroup>
                 </select>
 
-                <button type="submit" class="w-full bg-purple-600 py-4 rounded-xl font-black uppercase">Salvar Registro</button>
-                <button type="button" onclick="closeM()" class="w-full text-zinc-600 font-black uppercase text-[10px]">Fechar</button>
+                <button type="submit" class="w-full bg-purple-600 py-4 rounded-xl font-black uppercase">Salvar Atleta</button>
+                <button type="button" onclick="closeM()" class="w-full text-zinc-600 font-black uppercase text-[10px]">Cancelar</button>
             </form>
         </div>
     </div>
 
     <div id="m-gestao-geral" class="modal">
         <div class="glass p-8 rounded-[2.5rem] w-full max-w-2xl">
-            <h2 class="text-xl font-black uppercase italic text-purple-500 mb-6">Configurações do SaaS</h2>
-            
+            <h2 class="text-xl font-black uppercase italic text-purple-500 mb-6">Gestão Unidades</h2>
             <div class="bg-zinc-900/50 p-5 rounded-2xl mb-6 border border-zinc-800">
-                <h3 class="text-xs font-black uppercase mb-4 text-emerald-400 italic">Cadastrar Academia/Escola</h3>
-                <div class="space-y-3">
-                    <input type="text" id="esc-nome" class="input-pro" placeholder="Nome da Unidade">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="time" id="esc-inicio" class="input-pro"><input type="time" id="esc-fim" class="input-pro">
-                    </div>
-                    <div class="flex gap-1" id="dia-selector">
-                        <div class="day-chip" data-day="SEG">S</div><div class="day-chip" data-day="TER">T</div>
-                        <div class="day-chip" data-day="QUA">Q</div><div class="day-chip" data-day="QUI">Q</div>
-                        <div class="day-chip" data-day="SEX">S</div><div class="day-chip" data-day="SAB">S</div>
-                        <div class="day-chip" data-day="DOM">D</div>
-                    </div>
-                    <button onclick="addEscola()" class="w-full bg-emerald-600 py-3 rounded-lg font-black uppercase text-xs">Salvar Unidade</button>
+                <input type="text" id="esc-nome" class="input-pro mb-3" placeholder="Nome da Escola">
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <input type="time" id="esc-inicio" class="input-pro">
+                    <input type="time" id="esc-fim" class="input-pro">
                 </div>
+                <div class="flex gap-1 mb-4" id="dia-selector">
+                    <div class="day-chip" data-day="SEG">S</div><div class="day-chip" data-day="TER">T</div>
+                    <div class="day-chip" data-day="QUA">Q</div><div class="day-chip" data-day="QUI">Q</div>
+                    <div class="day-chip" data-day="SEX">S</div><div class="day-chip" data-day="SAB">S</div>
+                    <div class="day-chip" data-day="DOM">D</div>
+                </div>
+                <button onclick="addEscola()" class="w-full bg-emerald-600 py-3 rounded-lg font-black uppercase">Adicionar Escola</button>
                 <div id="lista-escolas" class="mt-4 space-y-2"></div>
             </div>
 
             <div class="bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800">
-                <h3 class="text-xs font-black uppercase mb-4 text-blue-400 italic">Estoque da Loja</h3>
-                <div class="flex gap-2 mb-4">
-                    <input type="text" id="prod-nome" class="input-pro" placeholder="Item"><input type="number" id="prod-preco" class="input-pro w-24" placeholder="R$">
+                <h3 class="text-xs font-black uppercase mb-3 text-blue-400 italic">Produtos Loja</h3>
+                <div class="flex gap-2">
+                    <input type="text" id="prod-nome" class="input-pro" placeholder="Item">
+                    <input type="number" id="prod-preco" class="input-pro w-24" placeholder="R$">
                     <button onclick="addProduto()" class="bg-blue-600 px-4 rounded-xl font-black">+</button>
                 </div>
-                <div id="lista-produtos" class="space-y-2 text-xs"></div>
+                <div id="lista-produtos" class="mt-3 space-y-1 text-[11px]"></div>
             </div>
-            
-            <button onclick="closeM()" class="w-full mt-6 text-zinc-500 font-black uppercase text-[10px]">Sair</button>
+            <button onclick="closeM()" class="w-full mt-6 text-zinc-500 font-black uppercase text-[10px]">Fechar</button>
         </div>
     </div>
 
-    <div id="m-mural" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm"><h2 class="text-xl font-black text-blue-500 mb-4">Mural</h2><textarea id="in-mural" class="input-pro h-32 mb-4"></textarea><button onclick="saveMural()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Publicar</button><button onclick="closeM()" class="w-full mt-2 text-xs">Sair</button></div></div>
-    <div id="m-financeiro" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm text-center"><h2 class="text-xl font-black text-emerald-500 mb-4 italic">CAIXA TOTAL</h2><p id="saldo-total" class="text-4xl font-black text-white">R$ 0,00</p><button onclick="closeM()" class="mt-8 text-xs font-black uppercase">Voltar</button></div></div>
-    <div id="m-venda" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm"><h2 class="text-xl font-black text-blue-400 mb-4">VENDA</h2><p id="venda-nome" class="text-xs mb-4 uppercase"></p><input type="hidden" id="venda-id"><select id="venda-item" class="input-pro mb-4"></select><button onclick="execVenda()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Confirmar Venda</button><button onclick="closeM()" class="w-full mt-2 text-xs">Cancelar</button></div></div>
+    <div id="m-mural" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm"><h2 class="text-xl font-black text-blue-500 mb-4">Mural</h2><textarea id="in-mural" class="input-pro h-32 mb-4"></textarea><button onclick="saveMural()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Publicar</button></div></div>
+    <div id="m-financeiro" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm text-center"><h2 class="text-xl font-black text-emerald-500 mb-4 italic">TOTAL EM CAIXA</h2><p id="saldo-total" class="text-4xl font-black text-white">R$ 0,00</p><button onclick="closeM()" class="mt-8 text-xs font-black uppercase">Voltar</button></div></div>
+    <div id="m-venda" class="modal"><div class="glass p-8 rounded-3xl w-full max-w-sm"><h2 class="text-xl font-black text-blue-400 mb-4 uppercase">Lojinha</h2><p id="venda-nome" class="text-xs mb-4 text-zinc-400 font-bold italic"></p><input type="hidden" id="venda-id"><select id="venda-item" class="input-pro mb-4"></select><button onclick="execVenda()" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase">Finalizar Venda</button></div></div>
 
     <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xs px-4">
-        <button onclick="openM('m-checkin')" class="w-full bg-emerald-600 py-6 rounded-full font-black text-xl italic shadow-2xl">CHECK-IN RÁPIDO</button>
+        <button onclick="openM('m-checkin')" class="w-full bg-emerald-600 py-6 rounded-full font-black text-xl italic shadow-2xl">CHECK-IN</button>
     </div>
 
-    <div id="m-checkin" class="modal"><div class="glass p-10 rounded-[3rem] w-full max-w-xs text-center"><h2 class="text-2xl font-black mb-6 italic">ID DO ATLETA</h2><input type="number" id="c-id" class="input-pro text-center text-5xl h-24 mb-6"><button onclick="checkin()" class="w-full bg-emerald-600 py-5 rounded-2xl font-black uppercase">Confirmar</button><button onclick="closeM()" class="mt-4 text-xs">Sair</button></div></div>
+    <div id="m-checkin" class="modal"><div class="glass p-10 rounded-[3rem] w-full max-w-xs text-center"><h2 class="text-2xl font-black mb-6 italic tracking-widest">ID DO ATLETA</h2><input type="number" id="c-id" class="input-pro text-center text-5xl h-24 mb-6"><button onclick="checkin()" class="w-full bg-emerald-600 py-5 rounded-2xl font-black uppercase">Confirmar Presença</button></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('BJJ_FLOW_V7')) || { atletas: [], escolas: [], produtos: [], mural: "" };
+        let db = JSON.parse(localStorage.getItem('BJJ_FLOW_V8')) || { atletas: [], escolas: [], produtos: [], mural: "" };
 
         document.querySelectorAll('.day-chip').forEach(c => c.onclick = () => c.classList.toggle('selected'));
 
@@ -173,6 +170,7 @@
         function closeM() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
 
         function calcIdade(dn) {
+            if(!dn) return "--";
             const n = new Date(dn); const h = new Date();
             let i = h.getFullYear() - n.getFullYear();
             if (h.getMonth() < n.getMonth() || (h.getMonth() == n.getMonth() && h.getDate() < n.getDate())) i--;
@@ -180,7 +178,7 @@
         }
         function updateIdadePreview() {
             const v = document.getElementById('a-nasc').value;
-            if(v) document.getElementById('preview-idade').innerText = calcIdade(v) + " ANOS";
+            document.getElementById('preview-idade').innerText = "IDADE: " + calcIdade(v) + " ANOS";
         }
 
         function addEscola() {
@@ -204,7 +202,7 @@
             if(n && p) { db.produtos.push({n, p, id: Date.now()}); save(); renderProdutos(); }
         }
         function renderProdutos() {
-            document.getElementById('lista-produtos').innerHTML = db.produtos.map(p => `<div class="bg-zinc-800 p-2 rounded flex justify-between border border-zinc-700"><span>${p.n}</span><span class="text-blue-400">R$ ${p.p}</span></div>`).join('');
+            document.getElementById('lista-produtos').innerHTML = db.produtos.map(p => `<div class="bg-zinc-800 p-2 rounded flex justify-between"><span>${p.n}</span><span>R$ ${p.p}</span></div>`).join('');
         }
 
         function saveAluno(e) {
@@ -233,23 +231,23 @@
             document.getElementById('a-meta').value = a.meta;
             document.getElementById('a-mensalidade').value = a.mensalidade;
             document.getElementById('a-faixa').value = a.faixa;
-            document.getElementById('titulo-aluno').innerText = "Editando Atleta";
+            document.getElementById('titulo-aluno').innerText = "Editar Cadastro";
             openM('m-aluno', a.escola); updateIdadePreview();
         }
 
-        function delAluno(id) { if(confirm("Deseja excluir permanentemente?")) { db.atletas = db.atletas.filter(x => x.id != id); save(); } }
+        function delAluno(id) { if(confirm("Excluir definitivamente?")) { db.atletas = db.atletas.filter(x => x.id != id); save(); } }
 
         function checkin() {
             const id = document.getElementById('c-id').value;
             const a = db.atletas.find(x => x.id.toString().slice(-4) == id || x.id == id);
-            if(a) { a.frequencia++; alert("OSS! " + a.nome); save(); closeM(); } else alert("ID não encontrado!");
+            if(a) { a.frequencia++; alert("PRESENÇA CONFIRMADA: " + a.nome); save(); closeM(); } else alert("ID NÃO ENCONTRADO");
         }
 
         function openVenda(id) {
             const a = db.atletas.find(x => x.id == id);
-            document.getElementById('venda-nome').innerText = a.nome;
+            document.getElementById('venda-nome').innerText = "ATLETA: " + a.nome;
             document.getElementById('venda-id').value = id;
-            document.getElementById('venda-item').innerHTML = db.produtos.map(p => `<option value="${p.p}">${p.n} - R$ ${p.p}</option>`).join('') || '<option>Nenhum produto</option>';
+            document.getElementById('venda-item').innerHTML = db.produtos.map(p => `<option value="${p.p}">${p.n} - R$ ${p.p}</option>`).join('');
             openM('m-venda');
         }
         function execVenda() {
@@ -259,36 +257,33 @@
         }
 
         function saveMural() { db.mural = document.getElementById('in-mural').value; save(); closeM(); }
-
         function calcFin() {
             let t = 0;
             db.atletas.forEach(a => { t += a.mensalidade; a.compras.forEach(c => t += c); });
             document.getElementById('saldo-total').innerText = "R$ " + t.toFixed(2);
         }
 
-        function save() { localStorage.setItem('BJJ_FLOW_V7', JSON.stringify(db)); render(); }
+        function save() { localStorage.setItem('BJJ_FLOW_V8', JSON.stringify(db)); render(); }
         function resetFormAluno() { 
-            document.getElementById('a-id').value = ""; 
-            document.getElementById('a-nome').value = ""; 
-            document.getElementById('a-nasc').value = "";
-            document.getElementById('preview-idade').innerText = "";
+            document.getElementById('a-id').value = ""; document.getElementById('a-nome').value = ""; 
+            document.getElementById('a-nasc').value = ""; document.getElementById('preview-idade').innerText = "IDADE: --";
             document.getElementById('titulo-aluno').innerText = "Ficha do Atleta";
         }
 
         function render() {
-            document.getElementById('stats-topo').innerText = db.atletas.length + " ATLETAS ATIVOS";
+            document.getElementById('stats-topo').innerText = db.atletas.length + " ATLETAS";
             const m = document.getElementById('display-mural');
             if(db.mural) { m.innerText = "📢 " + db.mural; m.classList.remove('hidden'); } else m.classList.add('hidden');
 
             document.getElementById('lista-alunos').innerHTML = db.atletas.map(a => {
-                const p = a.meta > 0 ? Math.min((a.frequencia / a.meta) * 100, 100) : 0;
-                const c = a.compras.reduce((acc, v) => acc + v, 0);
+                const prog = a.meta > 0 ? Math.min((a.frequencia / a.meta) * 100, 100) : 0;
+                const totalVenda = a.compras.reduce((acc, v) => acc + v, 0);
                 return `<tr class="text-[11px] border-b border-zinc-900">
                     <td class="py-5 font-black">#${a.id.toString().slice(-4)}<br><span class="text-white text-xs">${a.nome}</span></td>
-                    <td class="italic font-bold text-zinc-400 uppercase">${calcIdade(a.nasc)} ANOS<br><span class="text-[8px] text-zinc-600">NASC: ${a.nasc}</span></td>
-                    <td class="uppercase italic text-zinc-300 font-bold">${a.faixa}<br><span class="text-purple-400 text-[9px] font-black">${a.escola}</span></td>
-                    <td><div class="w-20 bg-zinc-800 h-1 rounded-full mb-1"><div class="bg-purple-600 h-full shadow-[0_0_8px_#a855f7]" style="width:${p}%"></div></div><span class="text-[9px] text-zinc-500 font-black">${a.frequencia}/${a.meta} AULAS</span></td>
-                    <td><button onclick="openVenda(${a.id})" class="text-emerald-400 font-black italic underline">R$ ${(a.mensalidade + c).toFixed(2)}</button></td>
+                    <td class="italic font-bold text-zinc-400 uppercase">${calcIdade(a.nasc)} ANOS<br><span class="text-[8px] text-zinc-600">DN: ${a.nasc}</span></td>
+                    <td class="uppercase italic font-bold text-zinc-300">${a.faixa}<br><span class="text-purple-400 text-[9px] font-black">${a.escola}</span></td>
+                    <td><div class="w-20 bg-zinc-800 h-1 rounded-full mb-1"><div class="bg-purple-600 h-full shadow-[0_0_8px_#a855f7]" style="width:${prog}%"></div></div><span class="text-[9px] text-zinc-500 font-black">${a.frequencia}/${a.meta}</span></td>
+                    <td><button onclick="openVenda(${a.id})" class="text-emerald-400 font-black italic underline">R$ ${(a.mensalidade + totalVenda).toFixed(2)}</button></td>
                     <td class="text-right">
                         <button onclick="editAluno(${a.id})" class="text-blue-400 font-black uppercase text-[10px] mr-3">Editar</button>
                         <button onclick="delAluno(${a.id})" class="text-red-900 font-black uppercase text-[10px]">X</button>
