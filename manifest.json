@@ -1,0 +1,17 @@
+{
+  "name": "BJJ FLOW PRO",
+  "short_name": "BJJ FLOW",
+  "description": "Sistema de Gestão de Jiu-Jitsu e Lojinha",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#a855f7",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/isometric/512/martial-arts-belt.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
