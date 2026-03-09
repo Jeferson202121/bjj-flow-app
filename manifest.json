@@ -1,17 +1,9 @@
-{
-  "name": "BJJ Flow Pro",
-  "short_name": "BJJ Flow",
-  "description": "Gestão Completa de Jiu-Jitsu",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#0b0b0d",
-  "theme_color": "#a855f7",
-  "icons": [
-    {
-      "src": "https://img.icons8.com/isometric/512/martial-arts-belt.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
-}
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('BJJ Flow carregado offline!', reg))
+        .catch(err => console.log('Erro no Service Worker', err));
+    });
+  }
+</script>
